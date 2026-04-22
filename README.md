@@ -54,6 +54,8 @@ Filebeat → Logstash (port 5044) → Filter/Enrich → Elasticsearch → Kibana
 - Enriches external IPs with GeoIP city, country, and coordinates
 - Routes enriched events to a daily index `logstash-ssh-YYYY.MM.dd`
 
+<img width="1919" height="1040" alt="Enriched Data" src="https://github.com/user-attachments/assets/d8ba6893-2ca8-4794-95fb-2e3796411d68" />
+
 ---
 
 ## Attack Simulation
