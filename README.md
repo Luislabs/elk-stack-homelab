@@ -30,6 +30,35 @@ and was used to explore Elasticsearch APIs and Kibana dashboards.
 - `GET /_nodes?pretty` — node configuration and stats
 - `GET /_cluster/settings?pretty` — cluster-wide settings
 
+## SIEM Dashboard — SSH Login Monitor
+
+Built a security monitoring dashboard in Kibana that visualizes SSH authentication events in real time.
+<img width="1919" height="960" alt="Complete_dashboard" src="https://github.com/user-attachments/assets/47de6ee0-ebc9-4541-948e-73a2f434aabb" />
+<img width="1909" height="707" alt="Attack Map" src="https://github.com/user-attachments/assets/ba058aff-f902-42ef-bd42-e7696edb7a20" />
+
+## Logstash Enrichment Pipeline
+
+Built a Logstash pipeline that intercepts raw auth logs from Filebeat, enriches them, and routes them to a dedicated security index.
+
+### Data Flow
+
+Filebeat → Logstash (port 5044) → Filter/Enrich → Elasticsearch → Kibana
+
+### What the Pipeline Does
+- Classifies events using pattern matching on raw message content
+- Tags failed logins with `ssh_failed_login` and `brute_force_attempt`
+- Tags successful logins with `ssh_successful_login`
+- Tags invalid user attempts with `ssh_invalid_user`
+- Adds structured `event_type` field for clean querying
+- Extracts source IP using Grok pattern matching
+- Enriches external IPs with GeoIP city, country, and coordinates
+- Routes enriched events to a daily index `logstash-ssh-YYYY.MM.dd`
+
+---
+
+## Attack Simulation
+
+Used Hydra to simulate SSH brute force attacks to generate realistic authentication data for dashboard testing. Maps to MITRE ATT&CK technique **T1110.001 — Brute Force: Password Guessing**.
 ## Troubleshooting Log
 ### Issue 1 — Unable to locate package elasticsearch
 **Cause:** apt package cache was stale after adding the Elastic repo.
